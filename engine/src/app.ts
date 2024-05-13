@@ -1,4 +1,5 @@
 import Config from "./config";
+import { getTopPools } from "./services/uniswapService";
 
 console.log("Hello, World!");
-console.log(Config.EXCHANGE2);
+getTopPools().then(console.log).catch(console.error);

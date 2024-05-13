@@ -2,7 +2,7 @@ import { ChainId } from "commons/models/chainId";
 import connect from "./db";
 import Pool from "commons/models/pool";
 import { Exchange } from "commons/models/exchange";
-import { PoolData } from "../../services/uniswapTypes";
+// import { PoolData } from "../../services/uniswapTypes";
 import Config from "../config";
 
 async function countPools(
@@ -78,43 +78,43 @@ function buildSetFull(pool: Pool, newPrice: number, tokenNumber: string) {
   return { ...setObj, ...setObj_15, ...setObj_60 };
 }
 
-async function upatePrices(poolData: PoolData): Promise<Pool | null> {
-  let pool = await getPool(poolData.id);
-  if (!pool) {
-    pool = new Pool({
-      exchange: Config.EXCHANGE2,
-      network: Config.NETWORK2,
-      id: poolData.id,
-      fee: Number(poolData.feeTier),
-      token0: poolData.token0.id,
-      token1: poolData.token1.id,
-      symbol: poolData.token0.symbol + poolData.token1.symbol,
-      symbol0: poolData.token0.symbol,
-      symbol1: poolData.token1.symbol,
-      decimals0: Number(poolData.token0.decimals),
-      decimals1: Number(poolData.token1.decimals),
-    } as Pool);
-    pool = await addPool(pool);
-  }
+// async function upatePrices(poolData: PoolData): Promise<Pool | null> {
+//   let pool = await getPool(poolData.id);
+//   if (!pool) {
+//     pool = new Pool({
+//       exchange: Config.EXCHANGE2,
+//       network: Config.NETWORK2,
+//       id: poolData.id,
+//       fee: Number(poolData.feeTier),
+//       token0: poolData.token0.id,
+//       token1: poolData.token1.id,
+//       symbol: poolData.token0.symbol + poolData.token1.symbol,
+//       symbol0: poolData.token0.symbol,
+//       symbol1: poolData.token1.symbol,
+//       decimals0: Number(poolData.token0.decimals),
+//       decimals1: Number(poolData.token1.decimals),
+//     } as Pool);
+//     pool = await addPool(pool);
+//   }
 
-  const newPrice0 = Number(poolData.token0Price);
-  const newPrice1 = Number(poolData.token1Price);
+//   const newPrice0 = Number(poolData.token0Price);
+//   const newPrice1 = Number(poolData.token1Price);
 
-  const setObj0 = buildSetFull(pool, newPrice0, "0");
-  const setObj1 = buildSetFull(pool, newPrice1, "1");
+//   const setObj0 = buildSetFull(pool, newPrice0, "0");
+//   const setObj1 = buildSetFull(pool, newPrice1, "1");
 
-  const db = await connect();
-  await db.pools.update({
-    where: { id: poolData.id },
-    data: { ...setObj0, ...setObj1 },
-  });
+//   const db = await connect();
+//   await db.pools.update({
+//     where: { id: poolData.id },
+//     data: { ...setObj0, ...setObj1 },
+//   });
 
-  return getPool(poolData.id);
-}
+//   return getPool(poolData.id);
+// }
 
 export default {
   getPool,
   addPool,
   countPools,
-  upatePrices,
+  //   upatePrices,
 };
