@@ -1,6 +1,23 @@
 import Config from "../config";
 import axios from "axios";
-import { PoolData } from "./uniswapTypes";
+import { PoolData, TokenData } from "./uniswapTypes";
+
+export async function getTokens(skip: number): Promise<TokenData[]> {
+  const query = `
+      {
+          tokens(first: 1000, skip: ${skip}) 
+          {
+              symbol,
+              id,
+              decimals,
+              name
+          }
+      }
+  `;
+
+  const { data } = await axios.post(Config.UNISWAP_GRAPH_URL, { query });
+  return data.data ? (data.data.tokens as TokenData[]) : [];
+}
 
 export async function getTopPools(
   count: number = 20,
