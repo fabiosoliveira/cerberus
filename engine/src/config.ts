@@ -1,47 +1,38 @@
 import { ChainId } from "commons/models/chainId";
 import { Exchange } from "commons/models/exchange";
-import dotenv from "dotenv";
+import ConfigBase from "commons/configBase";
 
-dotenv.config();
+export default class Config extends ConfigBase {
+  static MONITOR_INTERVAL: number = parseInt(`${process.env.MONITOR_INTERVAL}`);
+  static CHARGE_INTERVAL: number = parseInt(`${process.env.CHARGE_INTERVAL}`);
 
-const MONITOR_INTERVAL = Number(process.env.MONITOR_INTERVAL);
-const NETWORK = String(process.env.NETWORK);
+  static NETWORK: string = `${process.env.NETWORK}`;
 
-function getNetwork(network: string): ChainId {
-  switch (network) {
-    case "goerli":
-      return ChainId.GOERLI;
-    default:
-      return ChainId.MAINNET;
+  static getNetwork(network: string): ChainId {
+    switch (network) {
+      case "goerli":
+        return ChainId.GOERLI;
+      default:
+        return ChainId.MAINNET;
+    }
   }
-}
 
-const NETWORK2: ChainId = getNetwork(NETWORK);
+  static NETWORK2: ChainId = Config.getNetwork(Config.NETWORK);
 
-const EXCHANGE = String(process.env.EXCHANGE);
+  static EXCHANGE: string = `${process.env.EXCHANGE}`;
 
-function getExchange(exchange: string): Exchange {
-  switch (exchange) {
-    case "pancakeswap":
-      return Exchange.PancakeSwap;
-    default:
-      return Exchange.Uniswap;
+  static getExchange(exchange: string): Exchange {
+    switch (exchange) {
+      case "pancakeswap":
+        return Exchange.PancakeSwap;
+      default:
+        return Exchange.Uniswap;
+    }
   }
+
+  static EXCHANGE2: Exchange = Config.getExchange(Config.EXCHANGE);
+
+  static POOL_COUNT: number = parseInt(`${process.env.POOL_COUNT}`);
+
+  static WS_PORT: number = parseInt(`${process.env.WS_PORT}`);
 }
-
-const EXCHANGE2: Exchange = getExchange(EXCHANGE);
-
-const DATABASE_URL = String(process.env.DATABASE_URL);
-const UNISWAP_GRAPH_URL = String(process.env.UNISWAP_GRAPH_URL);
-const POOL_COUNT = Number(process.env.POOL_COUNT);
-
-export default {
-  MONITOR_INTERVAL,
-  NETWORK,
-  NETWORK2,
-  EXCHANGE,
-  EXCHANGE2,
-  DATABASE_URL,
-  UNISWAP_GRAPH_URL,
-  POOL_COUNT,
-};

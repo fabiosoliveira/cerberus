@@ -2,6 +2,9 @@ import Pool from "commons/models/pool";
 import Config from "./config";
 import { getTopPools } from "./services/uniswapService";
 import poolsRepository from "./repositories/poolsRepository";
+import WSSInit from "./wss";
+
+const WSS = WSSInit();
 
 async function executionCycle() {
   const pages = Math.ceil(Config.POOL_COUNT / 1000);
@@ -10,10 +13,13 @@ async function executionCycle() {
     const pools = await getTopPools(1000, i * 1000);
     console.log(`Loaded ${pools.length} pools...`);
 
+    const bulkResult = [];
     for (let j = 0; j < pools.length; j++) {
       const pool = pools[j];
       const poolResult = await poolsRepository.upatePrices(pool);
       if (!poolResult) continue;
+
+      bulkResult.push(poolResult);
 
       console.log(
         `Price for ${poolResult.symbol} (${
@@ -21,6 +27,8 @@ async function executionCycle() {
         }%) is ${Number(poolResult.price0).toFixed(3)}`
       );
     }
+
+    WSS.broadcast({ event: "priceUpdate", data: bulkResult });
   }
 }
 
