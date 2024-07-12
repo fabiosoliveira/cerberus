@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-type User = {
+type NewUser = {
   name: string;
   email: string;
   checkTos: boolean;
@@ -16,16 +16,21 @@ export default function Register() {
   const { push } = useRouter();
 
   const [message, setMessage] = useState<string>("");
-  const [user, setUser] = useState<User>({
+  const [user, setUser] = useState<NewUser>({
     name: "",
     email: "",
     checkTos: false,
   });
 
   function btnSaveClick(): void {
-    console.log(user);
+    setMessage("Saving...Wait...");
 
-    // push("/register/activate");
+    if (!user.checkTos) {
+      setMessage("You must read and accept the terms and service.");
+      return;
+    }
+
+    push("/register/activate");
   }
 
   function onUserChange(event: React.ChangeEvent<HTMLInputElement>): void {

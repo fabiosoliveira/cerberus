@@ -17,16 +17,14 @@ export default function Activate() {
   );
 
   function btnActivateClick(): void {
-    push("/pay");
+    push("/pay/" + wallet);
   }
 
   useEffect(() => {
     if (code && code.length === 6 && wallet) {
-      console.log(code, wallet);
-
-      // push("/pay");
+      push("/pay/" + wallet);
     }
-  }, [code, wallet]);
+  }, [code, push, wallet]);
 
   return (
     <>
