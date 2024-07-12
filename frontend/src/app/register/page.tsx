@@ -25,7 +25,7 @@ export default function Register() {
   function btnSaveClick(): void {
     console.log(user);
 
-    // push("/activate");
+    // push("/register/activate");
   }
 
   function onUserChange(event: React.ChangeEvent<HTMLInputElement>): void {
