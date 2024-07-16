@@ -1,10 +1,14 @@
 "use client";
 
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+
 import Navbar from "@/components/Navbars/AuthNavbar.js";
 import FooterSmall from "@/components/Footers/FooterSmall.js";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+
+import { getWallet } from "@/services/Web3Service";
+import { signUp } from "@/services/AuthService";
+import { User } from "commons/models/user";
 
 type NewUser = {
   name: string;
@@ -15,29 +19,56 @@ type NewUser = {
 export default function Register() {
   const { push } = useRouter();
 
-  const [message, setMessage] = useState<string>("");
   const [user, setUser] = useState<NewUser>({
     name: "",
     email: "",
     checkTos: false,
   });
+  const [message, setMessage] = useState<string>("");
 
-  function btnSaveClick(): void {
-    setMessage("Saving...Wait...");
+  function onUserChange(evt: React.ChangeEvent<HTMLInputElement>) {
+    setUser((prevState: any) => ({
+      ...prevState,
+      [evt.target.id]: evt.target.value,
+    }));
+  }
+
+  async function register() {
+    setMessage("Saving...wait...");
 
     if (!user.checkTos) {
-      setMessage("You must read and accept the terms and service.");
+      setMessage("You must read and accept the Terms of Service");
       return;
     }
 
-    push("/register/activate");
+    let wallet = localStorage.getItem("wallet");
+    if (!wallet) {
+      try {
+        wallet = await getWallet();
+      } catch (err: any) {
+        setMessage(err.message);
+        return;
+      }
+    }
+
+    try {
+      await signUp({
+        name: user.name,
+        address: wallet,
+        email: user.email,
+        planId: "Gold",
+      } as User);
+
+      push("/register/activate?wallet=" + wallet);
+    } catch (err: any) {
+      setMessage(
+        err.response ? JSON.stringify(err.response.data) : err.message
+      );
+    }
   }
 
-  function onUserChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    setUser((prevState: any) => ({
-      ...prevState,
-      [event.target.id]: event.target.value,
-    }));
+  function btnSaveClick() {
+    register();
   }
 
   return (
@@ -57,12 +88,7 @@ export default function Register() {
                 <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-200 border-0">
                   <div className="rounded-t mb-0 px-6 py-6">
                     <div className="flex content-center items-center justify-center mb-5">
-                      <Image
-                        src={"/img/cerberus.png"}
-                        width={128}
-                        height={128}
-                        alt="Cerberus"
-                      />
+                      <img src="/img/cerberus.png" width={128} />
                     </div>
                     <div className="text-center mb-3">
                       <h6 className="text-blueGray-500 text-sm font-bold">
@@ -81,7 +107,7 @@ export default function Register() {
                         <input
                           type="text"
                           id="name"
-                          value={user.name}
+                          value={user ? user.name : ""}
                           className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                           onChange={onUserChange}
                           placeholder="Name"
@@ -98,9 +124,9 @@ export default function Register() {
                         <input
                           type="email"
                           id="email"
-                          value={user.email}
-                          className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                          value={user ? user.email : ""}
                           onChange={onUserChange}
+                          className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                           placeholder="Email"
                         />
                       </div>
@@ -110,9 +136,9 @@ export default function Register() {
                           <input
                             id="checkTos"
                             type="checkbox"
-                            checked={user.checkTos}
-                            className="form-checkbox border-0 rounded text-blueGray-700 ml-1 w-5 h-5 ease-linear transition-all duration-150"
+                            checked={user ? user.checkTos : false}
                             onChange={onUserChange}
+                            className="form-checkbox border-0 rounded text-blueGray-700 ml-1 w-5 h-5 ease-linear transition-all duration-150"
                           />
                           <span className="ml-2 text-sm font-semibold text-blueGray-600">
                             I agree with the{" "}
