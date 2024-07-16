@@ -32,9 +32,7 @@ async function executionCycle() {
   }
 }
 
-const CINCO_MINUTOS = 5 * 60 * 1000;
-
-setInterval(executionCycle, CINCO_MINUTOS);
+setInterval(executionCycle, Config.MONITOR_INTERVAL);
 
 executionCycle();
 
