@@ -24,7 +24,13 @@ export default function RootLayout({
           href="/img/brand/apple-icon.png"
         />
       </head>
-      <body className="text-blueGray-700 antialiased">{children}</body>
+      <body className="text-blueGray-700 antialiased">
+        {children}
+        <script
+          type="text/javascript"
+          src="https://s3.tradingview.com/tv.js"
+        ></script>
+      </body>
     </html>
   );
 }
