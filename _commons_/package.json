@@ -10,12 +10,14 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/aes-js": "^3.1.4",
     "@types/node": "^20.14.10",
     "prisma": "^5.13.0",
     "typescript": "^5.4.5"
   },
   "dependencies": {
     "@prisma/client": "^5.13.0",
+    "aes-js": "^3.1.2",
     "dotenv": "^16.4.5"
   }
 }
