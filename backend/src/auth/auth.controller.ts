@@ -2,7 +2,6 @@ import {
   BadRequestException,
   Body,
   Controller,
-  NotFoundException,
   Param,
   Post,
   UnauthorizedException,
@@ -10,7 +9,7 @@ import {
 import { UserDTO } from '../user/user.dto';
 import { UserService } from '../user/user.service';
 import { User } from 'commons/models/user';
-import { MailerService } from '@nestjs-modules';
+import { MailerService } from '@nestjs-modules/mailer';
 import Config from '../config';
 import { JWT } from 'commons/models/jwt';
 import { ethers } from 'ethers';
