@@ -7,16 +7,16 @@ import {
   Post,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AuthDTO } from './auth.dto';
 import { UserDTO } from '../user/user.dto';
 import { UserService } from '../user/user.service';
 import { User } from 'commons/models/user';
-import { MailerService } from '@nestjs-modules/mailer';
+import { MailerService } from '@nestjs-modules';
 import Config from '../config';
-import { AuthService } from './auth.service';
 import { JWT } from 'commons/models/jwt';
 import { ethers } from 'ethers';
 import { Status } from 'commons/models/status';
+import { AuthDTO } from './auth.dto';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
