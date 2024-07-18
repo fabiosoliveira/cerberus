@@ -1,19 +1,39 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 import Link from "next/link";
 import Navbar from "@/components/Navbars/AuthNavbar.js";
 import FooterSmall from "@/components/Footers/FooterSmall.js";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+
+import { doLogin } from "@/services/Web3Service";
+import { Status } from "commons/models/status";
 
 export default function Login() {
   const { push } = useRouter();
 
   const [message, setMessage] = useState<string>("");
 
-  function btnLoginClick(): void {
-    push("/register");
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) push("/dashboard");
+  }, []);
+
+  function btnLoginClick() {
+    setMessage("Logging In...wait...");
+    doLogin()
+      .then((jwt) => {
+        if (!jwt) return;
+
+        if (jwt.status === Status.ACTIVE) push("/dashboard");
+        else if (jwt.status === Status.BLOCKED) push("/pay/" + jwt.address);
+        else if (jwt.status === Status.NEW)
+          push("/register/activate?wallet=" + jwt.address);
+        else if (jwt.status === Status.BANNED) push("/");
+        else push("/register");
+      })
+      .catch((err) => setMessage(err.message));
   }
 
   return (
@@ -33,12 +53,7 @@ export default function Login() {
                 <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-200 border-0">
                   <div className="rounded-t mb-0 px-6 py-6">
                     <div className="flex content-center items-center justify-center mb-5">
-                      <Image
-                        src={"/img/cerberus.png"}
-                        width={128}
-                        height={128}
-                        alt="Cerberus"
-                      />
+                      <img src="/img/cerberus.png" width={128} />
                     </div>
                     <div className="text-center mb-3">
                       <h6 className="text-blueGray-500 text-sm font-bold">
@@ -49,12 +64,7 @@ export default function Login() {
                         type="button"
                         onClick={btnLoginClick}
                       >
-                        <Image
-                          src="/img/metamask.svg"
-                          width={64}
-                          height={64}
-                          alt="MetaMask"
-                        />
+                        <img src="/img/metamask.svg" width={64} />
                         <span>Click to Connect</span>
                       </button>
                       <div>{message}</div>

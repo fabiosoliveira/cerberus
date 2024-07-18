@@ -1,30 +1,64 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
 import Navbar from "@/components/Navbars/AuthNavbar.js";
 import FooterSmall from "@/components/Footers/FooterSmall.js";
-import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { activate, signOut } from "@/services/AuthService";
 
 export default function Activate() {
   const { push } = useRouter();
+
   const searchParams = useSearchParams();
 
-  const [message, setMessage] = useState<string>("");
   const [code, setCode] = useState<string>(searchParams.get("code") || "");
   const [wallet, setWallet] = useState<string>(
     searchParams.get("wallet") || ""
   );
-
-  function btnActivateClick(): void {
-    push("/pay/" + wallet);
-  }
+  const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
     if (code && code.length === 6 && wallet) {
-      push("/pay/" + wallet);
+      activate(wallet, code)
+        .then((token) => {
+          localStorage.setItem("token", token);
+          push("/pay/" + wallet);
+        })
+        .catch((err) =>
+          setMessage(
+            err.response ? JSON.stringify(err.response.data) : err.message
+          )
+        );
+      return;
+    } else if (!wallet) {
+      const address = localStorage.getItem("wallet");
+      if (address) setWallet(address);
+      else signOut();
     }
-  }, [code, push, wallet]);
+  }, [code, wallet]);
+
+  function btnActivateClick() {
+    if (!code || code.length < 6) {
+      setMessage("The activation code must have 6 digits.");
+      return;
+    }
+
+    setMessage("Activating...wait...");
+    const address = localStorage.getItem("wallet");
+    if (address) {
+      activate(wallet, code)
+        .then((token) => {
+          localStorage.setItem("token", token);
+          push("/pay/" + wallet);
+        })
+        .catch((err) =>
+          setMessage(
+            err.response ? JSON.stringify(err.response.data) : err.message
+          )
+        );
+    } else signOut();
+  }
 
   return (
     <>
@@ -43,13 +77,7 @@ export default function Activate() {
                 <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-200 border-0">
                   <div className="rounded-t mb-0 px-6 py-6">
                     <div className="flex content-center items-center justify-center mb-5">
-                      <Image
-                        src={"/img/cerberus.png"}
-                        priority
-                        width={128}
-                        height={128}
-                        alt="Cerberus"
-                      />
+                      <img src="/img/cerberus.png" width={128} />
                     </div>
                     <div className="text-center mb-3">
                       <h6 className="text-blueGray-500 text-sm font-bold">
@@ -70,7 +98,7 @@ export default function Activate() {
                           id="code"
                           value={code}
                           className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                          onChange={(e) => setCode(e.target.value)}
+                          onChange={(evt) => setCode(evt.target.value)}
                           placeholder="000000"
                         />
                       </div>
