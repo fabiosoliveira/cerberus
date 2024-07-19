@@ -4,18 +4,16 @@ import React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-import NotificationDropdown from "@/components/Dropdowns/NotificationDropdown.js";
-import UserDropdown from "@/components/Dropdowns/UserDropdown";
+import UserDropdown from "@/components/UserDropdown";
 
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = React.useState("hidden");
   const pathname = usePathname();
   const { push } = useRouter();
 
-  function btnLogoutClick(
-    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-  ): void {
+  function btnLogoutClick(event: React.MouseEvent<HTMLElement>) {
     event.preventDefault();
+
     localStorage.clear();
     push("/");
   }
@@ -41,9 +39,7 @@ export default function Sidebar() {
           </Link>
           {/* User */}
           <ul className="md:hidden items-center flex flex-wrap list-none">
-            <li className="inline-block relative">
-              <NotificationDropdown />
-            </li>
+            <li className="inline-block relative"></li>
             <li className="inline-block relative">
               <UserDropdown />
             </li>
