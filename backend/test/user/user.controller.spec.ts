@@ -4,7 +4,7 @@ import { UserDTO } from 'src/user/user.dto';
 import { Status } from 'commons/models/status';
 import { ForbiddenException } from '@nestjs/common';
 import { UserController } from '../../src/user/user.controller';
-import { authServiceMock } from '../../test/auth/auth.service.mock';
+import { authServiceMock } from '../auth/auth.service.mock';
 
 describe('UserController Tests', () => {
   let userController: UserController;
