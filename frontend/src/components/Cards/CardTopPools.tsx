@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Pool from "commons/models/pool";
+import { getTopPools } from "@/services/PoolService";
 
 // components
 
@@ -7,7 +8,9 @@ export default function CardTopPools() {
   const [pools, setPools] = useState<Pool[]>([]);
 
   useEffect(() => {
-    // TODO: api call
+    getTopPools()
+      .then((pools) => setPools(pools))
+      .catch((err) => console.error(err));
   }, []);
 
   return (
