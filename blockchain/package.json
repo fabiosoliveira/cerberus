@@ -4,7 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "npx hardhat compile",
+    "test": "npx hardhat test",
+    "deploy": "npx hardhat run scripts/deploy.ts --network sepolia",
+    "node": "npx hardhat node --fork https://mainnet.infura.io/v3/<SUA API KEY>",
+    "deploy:test": "npx hardhat run scripts/test.ts --network local",
+    "ignition": "npx hardhat ignition deploy ignition/modules/CerberusPay.ts --network sepolia"
   },
   "keywords": [],
   "author": "",
