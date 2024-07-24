@@ -1,4 +1,4 @@
-import Config from "../config";
+import Config from "../configBase";
 import axios from "axios";
 import { PoolData, TokenData } from "./uniswapTypes";
 

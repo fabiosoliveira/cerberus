@@ -1,6 +1,6 @@
 import Pool from "commons/models/pool";
 import Config from "./config";
-import { getTopPools } from "./services/uniswapService";
+import { getTopPools } from "commons/services/uniswapService";
 import poolsRepository from "./repositories/poolsRepository";
 import WSSInit from "./wss";
 

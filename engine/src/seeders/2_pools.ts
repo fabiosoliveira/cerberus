@@ -1,8 +1,8 @@
 import ISeeder from "./ISeeder";
 import poolsRepository from "../repositories/poolsRepository";
 import Config from "../config";
-import { PoolData } from "../services/uniswapTypes";
-import { getTopPools } from "../services/uniswapService";
+import { PoolData } from "../../services/uniswapTypes";
+import { getTopPools } from "../../services/uniswapService";
 import Pool from "commons/models/pool";
 
 export class PoolsSeeder implements ISeeder {

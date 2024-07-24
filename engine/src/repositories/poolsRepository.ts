@@ -4,7 +4,7 @@ import Pool from "commons/models/pool";
 import { Exchange } from "commons/models/exchange";
 // import { PoolData } from "../../services/uniswapTypes";
 import Config from "../config";
-import { PoolData } from "../services/uniswapTypes";
+import { PoolData } from "../../services/uniswapTypes";
 
 async function countPools(
   exchange: Exchange,
