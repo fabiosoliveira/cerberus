@@ -76,6 +76,7 @@ export default function Automations() {
                       {automations && automations.length ? (
                         automations.map((a) => (
                           <AutomationRow
+                            key={a.id}
                             data={a}
                             onUpdate={() => setReload(Date.now())}
                           />
