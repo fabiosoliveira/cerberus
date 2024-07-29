@@ -5,7 +5,7 @@ import { User } from "../models/user";
 import { TransactionReceipt, TransactionResponse, ethers } from "ethers";
 
 const ABI_UNISWAP = require("./Uniswap.json");
-import * as ABI_ERC20 from "./ERC20.json";
+const ABI_ERC20 = require("./ERC20.json");
 
 import Automation from "../models/automation";
 import Pool from "../models/pool";
