@@ -13,6 +13,8 @@ import { AuthService } from './auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { PoolService } from './pool/pool.service';
 import { AutomationService } from './automation/automation.service';
+import { TradeController } from './trade/trade.controller';
+import { TradeService } from './trade/trade.service';
 
 @Module({
   imports: [
@@ -30,6 +32,7 @@ import { AutomationService } from './automation/automation.service';
     UserController,
     PoolController,
     AutomationController,
+    TradeController,
   ],
   providers: [
     AppService,
@@ -38,6 +41,7 @@ import { AutomationService } from './automation/automation.service';
     JwtService,
     PoolService,
     AutomationService,
+    TradeService,
   ],
 })
 export class AppModule {}
