@@ -1,24 +1,17 @@
-# Backend
+# Engine
 
-Cerberus backend project.
+Cerberus Engine.
 
-## How to Test
-
-1. git clone
-2. cd backend
-3. npm install
-4. npm test or npm run test:cov (with coverage)
-
-## How to Run
+## How To Run
 
 1. first, run blockchain local node or to deploy in prod
 2. git clone
-3. cd backend
+3. cd engine
 4. npm install
 5. copy .env.example as .env
 6. fill .env variables (attention to blockchain vars)
-7. run the database on replica mode (instructions below)
-8. run the database seeders (monitor project)
+7. run the database on replica mode
+8. npm run seeder
 9. npm start
 
 ## How to Run DB (replica mode)
